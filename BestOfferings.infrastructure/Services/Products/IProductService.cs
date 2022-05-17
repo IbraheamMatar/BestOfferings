@@ -10,7 +10,8 @@ namespace BestOfferings.infrastructure.Services.Products
 {
     public interface IProductService
     {
-        Task<List<ProductViewModel>> GetAllAPI(string serachKey);
+        //  Task<List<ProductViewModel>> GetAllAPI(string serachKey);
+        List<ProductViewModel> GetAllAPI(string serachKey);
         Task<int> Create(CreateProductDto dto);
         Task<int> Update(UpdateProductDto dto);
         Task<int> Delete(int id);

@@ -31,10 +31,11 @@ namespace BestOfferings.infrastructure.Services.Products
 
         }
 
-        public async Task<List<ProductViewModel>> GetAllAPI(string serachKey)
+        public List<ProductViewModel> GetAllAPI(string serachKey)
         {
-            var advertisment =  _db.Products.Include(x => x.Market).Include(x => x.Category.Name).Where(x => x.Name.Contains(serachKey) || string.IsNullOrWhiteSpace(serachKey)).ToList();
+            var advertisment =  _db.Products.Include(x => x.Market).Include(x => x.Category).Where(x => x.Name.Contains(serachKey) || string.IsNullOrWhiteSpace(serachKey)).ToList();
             return _mapper.Map<List<ProductViewModel>>(advertisment);
+
 
         }
 

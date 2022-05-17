@@ -24,7 +24,7 @@ namespace BestOfferings.API.Controllers
         public IActionResult GetAll(string searchKey)
         {
             var product = _productService.GetAllAPI(searchKey);
-            return Ok(GetResponse(product));
+            return Ok(product);
 
         }
 
