@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Middlewares\" />
+  </ItemGroup>
+
+  <ItemGroup>
+
+    <FrameworkReference Include="Microsoft.AspnetCore.App" />
+    
+  </ItemGroup>
+  
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+    <PackageReference Include="MailKit" Version="2.15.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BestOfferings.Data\BestOfferings.Data.csproj" />
+  </ItemGroup>
+
+</Project>
