@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BestOfferings.Core.ViewModels;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -19,7 +20,10 @@ namespace BestOfferings.Core.Dtos
         public decimal? Longitude { get; set; }
         public string Address { get; set; }
 
-       // public List<IFormFile> Products { get; set; }
+        // public List<IFormFile> Products { get; set; }
+
+        //public List<ProductViewModel> Products { get; set; }   // Last Change
+
 
     }
 }

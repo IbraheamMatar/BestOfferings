@@ -32,7 +32,7 @@ namespace BestOfferings.infrastructure.Services.Markets
 
 
 
-        public async Task<List<MarketViewModel>> GetAll(string serachKey)
+        public List<MarketViewModel> GetAll(string serachKey)
         {
             var markets =  _db.Markets.Include(x => x.Products).Where(x => x.Name.Contains(serachKey) || string.IsNullOrEmpty(serachKey)).ToList(); //Ass Updated
             return _mapper.Map<List<MarketViewModel>>(markets);

@@ -10,7 +10,8 @@ namespace BestOfferings.infrastructure.Services.Markets
 {
     public interface IMarketService
     {
-        Task<List<MarketViewModel>> GetAll(string serachKey);
+        //Task<List<MarketViewModel>> GetAll(string serachKey);
+        List<MarketViewModel> GetAll(string serachKey);
 
          Task<int> Create(CreateMarketDto dto);
 
