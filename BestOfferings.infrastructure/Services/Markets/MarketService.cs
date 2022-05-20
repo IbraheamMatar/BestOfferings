@@ -59,6 +59,45 @@ namespace BestOfferings.infrastructure.Services.Markets
         }
 
 
+        public async Task<int> Update(UpdateMarketDto dto)        // Reviewing
+        {
+
+
+
+            var market = await _db.Markets.SingleOrDefaultAsync(x => x.Id == dto.Id );
+            //if (product== null)
+            //{
+            //   // throw new EntityNotFoundException();
+            //}
+
+            var updateMarket = _mapper.Map(dto, market);
+
+            if (dto.LogoUrl != null)
+            {
+                updateMarket.LogoUrl = await _fileService.SaveFile(dto.LogoUrl, FolderNames.ImagesFolder);
+            }
+
+
+            _db.Markets.Update(updateMarket);
+            await _db.SaveChangesAsync();
+
+            return market.Id;
+        }
+
+
+        public async Task<int> Delete(int id)
+        {
+            var market = await _db.Markets.SingleOrDefaultAsync(x => x.Id == id);   // Reviewing code 
+            if (market == null)
+            {
+                // throw new EntityNotFoundException();
+            }
+            _db.Markets.Update(market);
+            await _db.SaveChangesAsync();
+            return market.Id;
+        }
+
+
 
 
         //public async Task<int> Create(CreateMarketDto dto)

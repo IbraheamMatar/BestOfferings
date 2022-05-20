@@ -23,7 +23,7 @@ namespace BestOfferings.infrastructure.Services.Categories
             _mapper = mapper;
         }
 
-        public async Task<List<CategoryViewModel>> GetAll(string serachKey)
+        public List<CategoryViewModel> GetAll(string serachKey)
         {
             var categories = _db.Categories.Include(x => x.Products).Where(x => x.Name.Contains(serachKey) || string.IsNullOrEmpty(serachKey)).ToList();
 

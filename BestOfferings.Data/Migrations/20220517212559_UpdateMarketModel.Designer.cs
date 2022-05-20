@@ -4,14 +4,16 @@ using BestOfferings.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BestOfferings.Data.Migrations
 {
     [DbContext(typeof(BestOfferingsDbContext))]
-    partial class BestOfferingsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220517212559_UpdateMarketModel")]
+    partial class UpdateMarketModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

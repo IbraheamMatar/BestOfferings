@@ -19,7 +19,6 @@ namespace BestOfferings.Core.ViewModels
 
       public List<ProductViewModel> Products { get; set; }
 
-   
 
 
     }

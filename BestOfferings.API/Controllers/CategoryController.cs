@@ -22,7 +22,7 @@ namespace BestOfferings.API.Controllers
         public ActionResult GetAll(string serachkey)
         {
             var categories = _categoryService.GetAll(serachkey);
-            return Ok(GetResponse(categories));
+            return Ok(categories);
         }
 
         [HttpGet]

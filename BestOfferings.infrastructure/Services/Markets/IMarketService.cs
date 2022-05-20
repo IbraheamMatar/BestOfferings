@@ -15,6 +15,9 @@ namespace BestOfferings.infrastructure.Services.Markets
 
          Task<int> Create(CreateMarketDto dto);
 
+        Task<int> Update(UpdateMarketDto dto);
+        Task<int> Delete(int id);
+
         Task<List<MarketViewModel>> NearMe(string userId);
 
 

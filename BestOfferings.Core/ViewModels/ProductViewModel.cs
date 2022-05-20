@@ -22,5 +22,8 @@ namespace BestOfferings.Core.ViewModels
 
 
 
+
+
+
     }
 }

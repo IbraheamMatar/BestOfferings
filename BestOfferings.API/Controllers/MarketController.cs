@@ -40,5 +40,23 @@ namespace BestOfferings.API.Controllers
         }
 
 
+
+        [HttpPut]
+        public async Task<IActionResult> Update([FromForm] UpdateMarketDto dto)
+        {
+            var savedId = await _marketService.Update(dto);
+            return Ok(GetResponse(savedId));
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var savedId = await _marketService.Delete(id);
+            return Ok(GetResponse(savedId));
+        }
+
+
+
+
     }
 }
