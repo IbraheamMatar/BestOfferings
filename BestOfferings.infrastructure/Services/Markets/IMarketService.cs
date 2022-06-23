@@ -13,13 +13,19 @@ namespace BestOfferings.infrastructure.Services.Markets
         //Task<List<MarketViewModel>> GetAll(string serachKey);
         List<MarketViewModel> GetAll(string serachKey);
 
+        Task<ResponseDto> GetAllMarket(Pagination pagination, Query query);
+
          Task<int> Create(CreateMarketDto dto);
 
         Task<int> Update(UpdateMarketDto dto);
-        Task<int> Delete(int id);
+        // Task<int> Delete(int id);
+        Task<int> Delete(int Id);
+        Task<List<MarketPureViewModel>> GetMarketName();
+
 
         Task<List<MarketViewModel>> NearMe(string userId);
-
+        //Task<MarketViewModel> Get(int id);
+        Task<UpdateMarketDto> Get(int Id);
 
 
     }

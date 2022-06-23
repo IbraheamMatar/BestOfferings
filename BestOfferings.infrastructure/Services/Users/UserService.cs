@@ -4,6 +4,7 @@ using BestOfferings.Core.Dtos;
 using BestOfferings.Core.ViewModels;
 using BestOfferings.Data.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,32 @@ namespace BestOfferings.infrastructure.Services.Users
             return _mapper.Map<List<UserViewModel>>(users);
         }
 
+
+
+        public async Task<ResponseDto> GetAllUsers(Pagination pagination, Query query)
+        {
+            var queryString = _db.Users.Where(x => !x.IsDelete && (x.FullName.Contains(query.GeneralSearch) || string.IsNullOrWhiteSpace(query.GeneralSearch) || x.PhoneNumber.Contains(query.GeneralSearch))).AsQueryable();
+
+            var dataCount = queryString.Count();
+            var skipValue = pagination.GetSkipValue();
+            var dataList = await queryString.Skip(skipValue).Take(pagination.PerPage).ToListAsync();
+            var users = _mapper.Map<List<UserViewModel>>(dataList);
+            var pages = pagination.GetPages(dataCount);
+            var result = new ResponseDto
+            {
+                data = users,
+                meta = new Meta
+                {
+                    page = pagination.Page,
+                    perpage = pagination.PerPage,
+                    pages = pages,
+                    total = dataCount,
+                }
+            };
+            return result;
+        }
+
+
         public async Task<string> Create(CreateUserDto dto)
         {
             var user = _mapper.Map<User>(dto);
@@ -52,9 +79,9 @@ namespace BestOfferings.infrastructure.Services.Users
             return user.Id;
         }
 
-        public async Task<string> Delete(string id)
+        public async Task<string> Delete(string Id)
         {
-            var user = _db.Users.SingleOrDefault(x => x.Id == id);
+            var user = _db.Users.SingleOrDefault(x => x.Id == Id);
             if (user == null)
             {
                 //throw 
@@ -65,14 +92,14 @@ namespace BestOfferings.infrastructure.Services.Users
             return user.Id;
         }
 
-        public async Task<UserViewModel> Get(string id)
+        public async Task<UpdateUserDto> Get(string Id)
         {
-            var user = _db.Users.SingleOrDefault(x => x.Id == id);
+            var user = _db.Users.SingleOrDefault(x => x.Id == Id);
             if (user == null)
             {
                 //throw 
             }
-            return _mapper.Map<UserViewModel>(user);
+            return _mapper.Map<UpdateUserDto>(user);
         }
 
 

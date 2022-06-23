@@ -16,7 +16,8 @@ namespace BestOfferings.Core.ViewModels
         public float Price { get; set; }
         public float? DiscountValue { get; set; }
 
-        public MarketViewModel Market { get; set; }
+        public ProdMrktVM Market{ get; set; }
+
 
         public CategoryViewModel Category { get; set; }
 

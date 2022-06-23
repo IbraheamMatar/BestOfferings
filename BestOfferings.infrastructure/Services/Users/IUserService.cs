@@ -11,9 +11,12 @@ namespace BestOfferings.infrastructure.Services.Users
     public interface IUserService
     {
         Task<List<UserViewModel>> GetAll(string serachKey);
+        Task<ResponseDto> GetAllUsers(Pagination pagination, Query query);
         Task<string> Create(CreateUserDto dto);
         Task<string> Update(UpdateUserDto dto);
-        Task<string> Delete(string id);
-        Task<UserViewModel> Get(string id);
+        //Task<string> Delete(string id);
+        Task<string> Delete(string Id);
+        //Task<UserViewModel> Get(string id);
+        Task<UpdateUserDto> Get(string Id);
     }
 }

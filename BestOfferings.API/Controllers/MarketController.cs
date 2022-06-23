@@ -1,5 +1,6 @@
 ﻿using BestOfferings.Core.Dtos;
 using BestOfferings.infrastructure.Services.Markets;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,8 @@ using System.Threading.Tasks;
 
 namespace BestOfferings.API.Controllers
 {
+    [AllowAnonymous]
+
     public class MarketController : BaseController
     {
 
@@ -23,6 +26,12 @@ namespace BestOfferings.API.Controllers
         {
             var markets = _marketService.GetAll(serachkey);
             return Ok(markets);
+        }
+        [HttpGet]
+        public IActionResult Get(int id)
+        {
+            var market = _marketService.Get(id);
+            return Ok(market);
         }
 
         [HttpGet]

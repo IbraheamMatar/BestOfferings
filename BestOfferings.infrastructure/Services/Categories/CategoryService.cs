@@ -23,15 +23,49 @@ namespace BestOfferings.infrastructure.Services.Categories
             _mapper = mapper;
         }
 
-        public List<CategoryViewModel> GetAll(string serachKey)
+        public List<CategoryViewModel> GetAPI(string serachKey)
         {
-            var categories = _db.Categories.Include(x => x.Products).Where(x => x.Name.Contains(serachKey) || string.IsNullOrEmpty(serachKey)).ToList();
+            var categories = _db.Categories.Include(x => x.Markets).Where(x => x.Name.Contains(serachKey) || string.IsNullOrEmpty(serachKey)).ToList();
 
             return _mapper.Map<List<CategoryViewModel>>(categories);
         }
 
+        public List<CategoryPureViewModel> GetAllCategories(string serachKey)
+        {
+            var categories = _db.Categories.Where(x => x.Name.Contains(serachKey) || string.IsNullOrEmpty(serachKey)).ToList();
 
-    
+            return _mapper.Map<List<CategoryPureViewModel>>(categories);
+        }
+
+
+
+
+        public async Task<ResponseDto> GetAll(Pagination pagination, Query query)
+        {
+            var queryString = _db.Categories.Where(x => !x.IsDelete && (x.Name.Contains(query.GeneralSearch) || string.IsNullOrWhiteSpace(query.GeneralSearch))).AsQueryable();
+
+            var dataCount = queryString.Count();
+            var skipValue = pagination.GetSkipValue();
+            var dataList = await queryString.Skip(skipValue).Take(pagination.PerPage).ToListAsync();
+            var categories = _mapper.Map<List<CategoryViewModel>>(dataList);
+            var pages = pagination.GetPages(dataCount);
+            var result = new ResponseDto
+            {
+                data = categories,
+                meta = new Meta
+                {
+                    page = pagination.Page,
+                    perpage = pagination.PerPage,
+                    pages = pages,
+                    total = dataCount,
+                }
+            };
+            return result;
+        }
+
+
+
+
 
         public async Task<int> Create(CreateCategoryDto dto)
         {
@@ -41,23 +75,65 @@ namespace BestOfferings.infrastructure.Services.Categories
             return category.Id;
         }
 
+
+
+
+        //public async Task<int> Update(UpdateCategoryDto dto)
+        //{
+        //    var category = _db.Categories.SingleOrDefault(x => x.Id == dto.Id);
+        //    if (category == null)
+        //    {
+        //        //throw 
+        //    }
+        //    var updatedCategory = _mapper.Map(dto, category);
+        //    _db.Categories.Update(updatedCategory);
+        //    _db.SaveChanges();
+        //    return category.Id;
+        //}
+
+
         public async Task<int> Update(UpdateCategoryDto dto)
         {
-            var category = _db.Categories.SingleOrDefault(x => x.Id == dto.Id);
+            var category = await _db.Categories.SingleOrDefaultAsync(x => !x.IsDelete && x.Id == dto.Id);
+            if (category == null)
+            {
+              //  throw new EntityNotFoundException();
+            }
+            var updatedCategory = _mapper.Map<UpdateCategoryDto, Category>(dto, category);
+            _db.Categories.Update(updatedCategory);
+            await _db.SaveChangesAsync();
+            return updatedCategory.Id;
+        }
+
+
+        //public async Task<UpdateCategoryDto> Get(int Id)
+        //{
+        //    var category = await _db.Categories.SingleOrDefaultAsync(x => x.Id == Id && !x.IsDelete);
+        //    if (category == null)
+        //    {
+        //       // throw new EntityNotFoundException();
+        //    }
+        //    return _mapper.Map<UpdateCategoryDto>(category);
+        //}
+
+        public async Task<UpdateCategoryDto> Get(int Id)
+        {
+            var category = _db.Categories.Include(x => x.Markets).SingleOrDefault(x => x.Id == Id);
             if (category == null)
             {
                 //throw 
             }
-            var updatedCategory = _mapper.Map(dto, category);
-            _db.Categories.Update(updatedCategory);
-            _db.SaveChanges();
-            return category.Id;
+            var categoryVm = _mapper.Map<UpdateCategoryDto>(category);
+
+
+            return categoryVm;
         }
 
 
-        public async Task<int> Delete(int id)
+
+        public async Task<int> Delete(int Id)
         {
-            var category = _db.Categories.SingleOrDefault(x => x.Id == id);
+            var category = _db.Categories.SingleOrDefault(x => x.Id == Id);
             if (category == null)
             {
                 //throw 
@@ -68,17 +144,25 @@ namespace BestOfferings.infrastructure.Services.Categories
             return category.Id;
         }
 
-        public async Task<CategoryViewModel> Get(int id)
+        public async Task<List<CategoryPureViewModel>> GetCategoryName()
         {
-            var category = _db.Categories.SingleOrDefault(x => x.Id == id);
-            if (category == null)
-            {
-                //throw 
-            }
-            var categoryVm = _mapper.Map<CategoryViewModel>(category);
-            categoryVm.ProductCount = _db.Products.Count(x => x.CategoryId == category.Id);
-            return categoryVm;
+            var category = await _db.Categories.Where(x => !x.IsDelete).ToListAsync();
+            return _mapper.Map<List<CategoryPureViewModel>>(category);
         }
+
+
+
+        //public async Task<CategoryViewModel> Get(int id)
+        //{
+        //    var category = _db.Categories.SingleOrDefault(x => x.Id == id);
+        //    if (category == null)
+        //    {
+        //        //throw 
+        //    }
+        //    var categoryVm = _mapper.Map<CategoryViewModel>(category);
+        //    categoryVm.ProductCount = _db.Products.Count(x => x.CategoryId == category.Id);
+        //    return categoryVm;
+        //}
 
 
     }

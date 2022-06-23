@@ -1,5 +1,6 @@
 ﻿using BestOfferings.Core.Dtos;
 using BestOfferings.infrastructure.Services.Categories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace BestOfferings.API.Controllers
 {
+    [AllowAnonymous]
 
     public class CategoryController : BaseController
     {
@@ -19,17 +21,26 @@ namespace BestOfferings.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetAll(string serachkey)
+        public ActionResult GetAPI(string serachkey)
         {
-            var categories = _categoryService.GetAll(serachkey);
+            var categories = _categoryService.GetAPI(serachkey);
             return Ok(categories);
         }
+
+
+        [HttpGet]
+        public ActionResult GetAllCategories(string serachKey)
+        {
+            var categories = _categoryService.GetAllCategories(serachKey);
+            return Ok(categories);
+        }
+
 
         [HttpGet]
         public IActionResult Get(int id)
         {
             var category = _categoryService.Get(id);
-            return Ok(GetResponse(category));
+            return Ok(category);
         }
 
         [HttpPost]
@@ -38,6 +49,8 @@ namespace BestOfferings.API.Controllers
             var savedId = _categoryService.Create(dto);
             return Ok(GetResponse(savedId));
         }
+
+
 
         [HttpPut]
         public IActionResult Update(UpdateCategoryDto dto)

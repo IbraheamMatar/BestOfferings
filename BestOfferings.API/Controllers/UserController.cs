@@ -1,5 +1,6 @@
 ﻿using BestOfferings.Core.Dtos;
 using BestOfferings.infrastructure.Services.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,7 @@ namespace BestOfferings.API.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public IActionResult Create([FromBody] CreateUserDto dto)
         {
             var savedId = _userService.Create(dto);

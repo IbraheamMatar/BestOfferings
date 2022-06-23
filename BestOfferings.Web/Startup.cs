@@ -1,4 +1,5 @@
 using BestOfferings.API.Data;
+using BestOfferings.Data.Models;
 using BestOfferings.infrastructure.AutoMapper;
 using BestOfferings.infrastructure.Extentions;
 using Microsoft.AspNetCore.Builder;
@@ -34,11 +35,18 @@ namespace BestOfferings.Web
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<BestOfferingsDbContext>();
+            //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            //    .AddEntityFrameworkStores<BestOfferingsDbContext>();
+
+            services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+              .AddEntityFrameworkStores<BestOfferingsDbContext>();
+
+            services.AddRazorPages();
+
             services.AddControllersWithViews();
 
             services.RegisterServices(); // collection As a Contain Services
+
             services.AddAutoMapper(typeof(AutomapperProfile).Assembly);
 
         }

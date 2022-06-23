@@ -36,8 +36,55 @@ namespace BestOfferings.infrastructure.Services.Products
             var advertisment =  _db.Products.Include(x => x.Market).Include(x => x.Category).Where(x => x.Name.Contains(serachKey) || string.IsNullOrWhiteSpace(serachKey)).ToList();
             return _mapper.Map<List<ProductViewModel>>(advertisment);
 
+        }
+
+
+        public async Task<ResponseDto> GetAll(Pagination pagination, Query query)
+        {
+            var queryString = _db.Products
+                .Include(x => x.Market)
+                .Include(x => x.Category)
+                .Where(x => !x.IsDelete).AsQueryable();
+
+            var dataCount = queryString.Count();
+            var skipValue = pagination.GetSkipValue();
+            var dataList = await queryString.Skip(skipValue).Take(pagination.PerPage).ToListAsync();
+            var products = _mapper.Map<List<ProductViewModel>>(dataList);
+            var pages = pagination.GetPages(dataCount);
+            var result = new ResponseDto
+            {
+                data = products,
+                meta = new Meta
+                {
+                    page = pagination.Page,
+                    perpage = pagination.PerPage,
+                    pages = pages,
+                    total = dataCount,
+                }
+            };
+            return result;
+        }
+
+        public async Task<UpdateProductDto> Get(int Id)
+        {
+            var product = await _db.Products.SingleOrDefaultAsync(x => x.Id == Id);
+            if (product == null)
+            {
+                //throw 
+            }
+            return _mapper.Map<UpdateProductDto>(product);
+
 
         }
+
+
+        public List<ProductPureViewModel> LatestOffers_Products()
+        {
+            var advertisment = _db.Products.OrderByDescending(x => x.Id);
+            return _mapper.Map<List<ProductPureViewModel>>(advertisment);
+
+        }
+
 
 
         public async Task<int> Create(CreateProductDto dto)
@@ -89,9 +136,9 @@ namespace BestOfferings.infrastructure.Services.Products
         }
 
 
-        public async Task<int> Delete(int id)
+        public async Task<int> Delete(int Id)
         {
-            var product = await _db.Products.SingleOrDefaultAsync(x => x.Id == id && !x.IsDelete);
+            var product = await _db.Products.SingleOrDefaultAsync(x => x.Id == Id && !x.IsDelete);
             if (product == null)
             {
                // throw new EntityNotFoundException();
@@ -101,6 +148,8 @@ namespace BestOfferings.infrastructure.Services.Products
             await _db.SaveChangesAsync();
             return product.Id;
         }
+
+
 
     }
 }

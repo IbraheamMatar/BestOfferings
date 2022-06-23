@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BestOfferings.Data.Models
 {
-  public  class Market
+  public  class Market:BaseEntity
     {
         public int Id { get; set; }
         [Required]
@@ -21,7 +21,8 @@ namespace BestOfferings.Data.Models
 
         public List<Product> Products{ get; set; }
 
-
+        public int CategoryID { get; set; }  // relation database mahmoud
+        public Category Category { get; set; }  // relation database mahmoud
         public List<Order> Orders { get; set; }
 
 

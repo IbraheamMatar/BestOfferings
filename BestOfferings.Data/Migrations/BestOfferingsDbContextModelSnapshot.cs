@@ -35,9 +35,6 @@ namespace BestOfferings.Data.Migrations
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("MarketId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -49,8 +46,6 @@ namespace BestOfferings.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MarketId");
 
                     b.ToTable("Categories");
                 });
@@ -64,6 +59,21 @@ namespace BestOfferings.Data.Migrations
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoryName")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
 
                     b.Property<decimal?>("Latitude")
                         .HasColumnType("decimal(18,2)");
@@ -82,7 +92,15 @@ namespace BestOfferings.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Markets");
                 });
@@ -396,11 +414,13 @@ namespace BestOfferings.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("BestOfferings.Data.Models.Category", b =>
+            modelBuilder.Entity("BestOfferings.Data.Models.Market", b =>
                 {
-                    b.HasOne("BestOfferings.Data.Models.Market", null)
-                        .WithMany("Categories")
-                        .HasForeignKey("MarketId");
+                    b.HasOne("BestOfferings.Data.Models.Category", "Category")
+                        .WithMany("Markets")
+                        .HasForeignKey("CategoryId");
+
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("BestOfferings.Data.Models.Order", b =>
@@ -513,13 +533,13 @@ namespace BestOfferings.Data.Migrations
 
             modelBuilder.Entity("BestOfferings.Data.Models.Category", b =>
                 {
+                    b.Navigation("Markets");
+
                     b.Navigation("Products");
                 });
 
             modelBuilder.Entity("BestOfferings.Data.Models.Market", b =>
                 {
-                    b.Navigation("Categories");
-
                     b.Navigation("Orders");
 
                     b.Navigation("Products");

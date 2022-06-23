@@ -1,6 +1,7 @@
 ﻿using BestOfferings.Core.Dtos;
 using BestOfferings.Data.Models;
 using BestOfferings.infrastructure.Services.Products;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace BestOfferings.API.Controllers
 {
+    [AllowAnonymous]
     public class ProductController : BaseController
 
     {
@@ -24,6 +26,14 @@ namespace BestOfferings.API.Controllers
         public IActionResult GetAll(string searchKey)
         {
             var product = _productService.GetAllAPI(searchKey);
+            return Ok(product);
+
+        }
+
+        [HttpGet]
+        public IActionResult LatestOffers_Products()
+        {
+            var product = _productService.LatestOffers_Products();
             return Ok(product);
 
         }

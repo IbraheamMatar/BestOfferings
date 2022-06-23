@@ -17,7 +17,7 @@ namespace BestOfferings.Core.ViewModels
         public decimal? Longitude { get; set; }
         public string Address { get; set; }
 
-      public List<ProductViewModel> Products { get; set; }
+      public List<ProductPureViewModel> Products { get; set; }
 
 
 

@@ -12,7 +12,9 @@ namespace BestOfferings.Core.ViewModels
         public string Name { get; set; }
         public int ProductCount { get; set; }
 
-        public List<ProductViewModel> Products { get; set; }
+        // public List<ProductViewModel> Products { get; set; }
+
+     public List<MarketPureViewModel> Markets { get; set; }   // NotInit Relation Models
 
     }
 }

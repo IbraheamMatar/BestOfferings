@@ -40,6 +40,51 @@ namespace BestOfferings.infrastructure.Services.Markets
 
 
 
+        public async Task<ResponseDto> GetAllMarket(Pagination pagination, Query query)
+        {
+            var queryString = _db.Markets.Include(x => x.Products).Where(x => !x.IsDelete && (x.Name.Contains(query.GeneralSearch) || string.IsNullOrWhiteSpace(query.GeneralSearch))).AsQueryable();
+
+            var dataCount = queryString.Count();
+            var skipValue = pagination.GetSkipValue();
+            var dataList = await queryString.Skip(skipValue).Take(pagination.PerPage).ToListAsync();
+            var markets = _mapper.Map<List<MarketViewModel>>(dataList);
+            var pages = pagination.GetPages(dataCount);
+            var result = new ResponseDto
+            {
+                data = markets,
+                meta = new Meta
+                {
+                    page = pagination.Page,
+                    perpage = pagination.PerPage,
+                    pages = pages,
+                    total = dataCount,
+                }
+            };
+            return result;
+        }
+
+
+
+        public async Task<List<MarketPureViewModel>> GetMarketName()
+        {
+            var market = await _db.Markets.Where(x => !x.IsDelete).ToListAsync();
+            return _mapper.Map<List<MarketPureViewModel>>(market);
+        }
+
+
+        public async Task<UpdateMarketDto> Get(int Id)
+        {
+            var market = _db.Markets.Include (x => x.Products).SingleOrDefault(x => x.Id == Id);
+            if (market == null)
+            {
+                //throw 
+            }
+            var marketVm = _mapper.Map<UpdateMarketDto>(market);
+
+
+            return marketVm;
+        }
+
 
 
 
@@ -85,9 +130,9 @@ namespace BestOfferings.infrastructure.Services.Markets
         }
 
 
-        public async Task<int> Delete(int id)
+        public async Task<int> Delete(int Id)
         {
-            var market = await _db.Markets.SingleOrDefaultAsync(x => x.Id == id);   // Reviewing code 
+            var market = await _db.Markets.SingleOrDefaultAsync(x => x.Id == Id);   // Reviewing code 
             if (market == null)
             {
                 // throw new EntityNotFoundException();
