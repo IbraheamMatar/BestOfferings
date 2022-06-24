@@ -1,4 +1,5 @@
-﻿using BestOfferings.infrastructure.Services.AuthService;
+﻿using BestOfferings.infrastructure.Services;
+using BestOfferings.infrastructure.Services.AuthService;
 using BestOfferings.infrastructure.Services.Categories;
 using BestOfferings.infrastructure.Services.Files;
 using BestOfferings.infrastructure.Services.Markets;
@@ -22,6 +23,7 @@ namespace BestOfferings.infrastructure.Extentions
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IMarketService, MarketService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IDashboardService, DashboardService>();
             services.AddSingleton<IFileService, FileService>();
 
             return services;

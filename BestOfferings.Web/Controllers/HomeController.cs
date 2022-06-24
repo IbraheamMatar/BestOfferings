@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BestOfferings.infrastructure.Services;
+using BestOfferings.infrastructure.Services.Users;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -10,22 +12,42 @@ namespace BestOfferings.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IDashboardService _dashboardService;
+
+        public HomeController(IDashboardService dashboardService, IUserService userService) 
         {
-            _logger = logger;
+            _dashboardService = dashboardService;
         }
 
-        public IActionResult Index()
+
+
+
+
+
+
+        public async Task<IActionResult> Index()
         {
-            return View();
+      
+            var data = await _dashboardService.GetData();
+            return View(data);
         }
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> GetContentTypeChartData()
         {
-            return View();
+            var data = await _dashboardService.GetContentTypeChart();
+            return Ok(data);
         }
+
+
+        public async Task<IActionResult> GetContentByMonthChartData()
+        {
+            var data = await _dashboardService.GetProductByMonthChart();
+            return Ok(data);
+        }
+
+
+
 
     }
 }

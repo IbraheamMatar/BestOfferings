@@ -23,7 +23,7 @@ namespace BestOfferings.infrastructure.AutoMapper
 
 
 
-            CreateMap<User, UserViewModel>();
+            CreateMap<User, UserViewModel>().ForMember(x => x.CreatedAt, x => x.MapFrom(x => x.CreatedAt.ToString("yyyy:MM:dd")));
             CreateMap<CreateUserDto, User>().ForMember(x => x.Id, x => x.Ignore());
             CreateMap<UpdateUserDto, User>();
             CreateMap<User, UpdateUserDto>();

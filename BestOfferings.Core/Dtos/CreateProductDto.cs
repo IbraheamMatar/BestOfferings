@@ -16,6 +16,7 @@ namespace BestOfferings.Core.Dtos
         public float Price { get; set; }
         public float? DiscountValue { get; set; }
 
+
         public int MarketId { get; set; }
       //  public CreateMarketDto Market { get; set; }
         public int CategoryId { get; set; }
